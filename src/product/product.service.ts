@@ -3,6 +3,7 @@ import { CategoryService } from 'src/category/category.service';
 import { PrismaService } from 'src/prisma.service';
 import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
+import { Product } from './product.entity';
 
 @Injectable()
 export class ProductService {
@@ -25,7 +26,7 @@ export class ProductService {
     return newProduct;
   }
 
-  findAll() {
+  async findAll() {
     return this.prisma.product.findMany({
       // include: {
       //   category: true,
@@ -33,8 +34,16 @@ export class ProductService {
     });
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return this.prisma.product.findUnique({ where: { id: Number(id) } });
+  }
+
+  async findProductsByCategory(categoryId: number): Promise<any[]> {
+    return this.prisma.product.findMany({
+      where: {
+        categoryId: Number(categoryId),
+      },
+    });
   }
 
   // update(id: number, updateProductInput: UpdateProductInput) {

@@ -17,16 +17,6 @@ import { Category } from 'src/category/category.model';
 export class ProductResolver {
   constructor(private readonly productService: ProductService) {}
 
-  @Query(() => [Product], { name: 'products' })
-  findAll() {
-    return this.productService.findAll();
-  }
-
-  @Query(() => Product, { name: 'product' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.productService.findOne(id);
-  }
-
   @ResolveField((returns) => Category)
   category(@Parent() product: Product) {
     console.log('product', product);
@@ -41,6 +31,16 @@ export class ProductResolver {
     */
 
     return this.productService.getCategory(product['categoryId']);
+  }
+
+  @Query(() => [Product], { name: 'products' })
+  findAll() {
+    return this.productService.findAll();
+  }
+
+  @Query(() => Product, { name: 'product' })
+  findOne(@Args('id', { type: () => Int }) id: number) {
+    return this.productService.findOne(id);
   }
 
   @Mutation(() => Product)
